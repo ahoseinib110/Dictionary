@@ -1,5 +1,7 @@
 package org.maktab.dictionary.controller.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.maktab.dictionary.R;
+import org.maktab.dictionary.repository.DicDBRepository;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +31,8 @@ public class DicFragment extends Fragment {
     private TextView mTextViewDst;
     private Button mButtonAdd;
     private Button mButtonSearch;
+
+    private DicDBRepository mDicRepository;
 
     public DicFragment() {
         // Required empty public constructor
@@ -46,6 +51,7 @@ public class DicFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        mDicRepository=DicDBRepository.newInstance(getActivity().getApplicationContext());
     }
 
     @Override
