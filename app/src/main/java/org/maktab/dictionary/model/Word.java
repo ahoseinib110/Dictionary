@@ -16,7 +16,7 @@ public class Word {
     private String mFrench;
     @ColumnInfo(name = "arabic")
     private String mArabic;
-/*
+
     public static class Builder {
         private String english;
         private String persian;
@@ -62,7 +62,7 @@ public class Word {
             return word;
         }
     }
-*/
+
     public Word() {
 
     }

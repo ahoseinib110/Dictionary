@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,8 +78,8 @@ public class DicFragment extends Fragment {
 
     public void findViews(View view) {
         mEditTextSearch = view.findViewById(R.id.editTextSearch);
-        mSpinnerSrc = view.findViewById(R.id.spinnerSrc);
-        mSpinnerDst = view.findViewById(R.id.spinnerDst);
+        mSpinnerSrc = view.findViewById(R.id.spinnerFrom);
+        mSpinnerDst = view.findViewById(R.id.spinnerTo);
         mTextViewSrc = view.findViewById(R.id.textViewSrc);
         mTextViewDst = view.findViewById(R.id.textViewDst);
         mButtonSearch = view.findViewById(R.id.buttonSearch);
@@ -174,11 +172,13 @@ public class DicFragment extends Fragment {
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
-                Word word = new Word();
-                word.setEnglish("cat");
-                word.setPersian("گربه");
+                Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
+                //Word word = new Word();
+                //word.setEnglish("cat");
+                //word.setPersian("گربه");
                 mDicRepository.insert(word);
+                AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
+                addDialogFragment.show(getFragmentManager(),"addDialogFragment");
                 //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
             }
         });

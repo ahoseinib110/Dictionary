@@ -54,33 +54,6 @@
                 tools:text="گربه" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/text_view_src"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerSrc"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerSrc"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinnerSrc" />
-
-    <Spinner
-        android:id="@+id/spinnerSrc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/textView2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSearch" />
-
     <EditText
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
@@ -95,6 +68,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/text_view_src"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerFrom"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerFrom"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinnerFrom" />
+
+    <Spinner
+        android:id="@+id/spinnerFrom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearch" />
+
+
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,14 +104,14 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/text_view_dst"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerDst"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerDst"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerTo"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerTo"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/spinnerSrc"
-        app:layout_constraintTop_toTopOf="@+id/spinnerDst" />
+        app:layout_constraintStart_toEndOf="@+id/spinnerFrom"
+        app:layout_constraintTop_toTopOf="@+id/spinnerTo" />
 
     <Spinner
-        android:id="@+id/spinnerDst"
+        android:id="@+id/spinnerTo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -118,12 +119,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/spinnerSrc" />
+        app:layout_constraintTop_toTopOf="@+id/spinnerFrom" />
 
     <Button
         android:id="@+id/buttonSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="Search"
         app:layout_constraintBottom_toBottomOf="@+id/buttonAdd"
         app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
@@ -136,7 +141,11 @@
         android:id="@+id/buttonAdd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="Add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -149,7 +158,6 @@
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:src="@mipmap/ic_search"
         app:layout_constraintBottom_toBottomOf="@+id/editTextSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextSearch"
