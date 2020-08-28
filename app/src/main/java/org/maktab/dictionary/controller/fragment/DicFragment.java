@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ public class DicFragment extends Fragment {
     private Spinner mSpinnerDst;
     private TextView mTextViewSrc;
     private TextView mTextViewDst;
+    private Button mButtonAdd;
+    private Button mButtonSearch;
 
     public DicFragment() {
         // Required empty public constructor
@@ -51,6 +54,7 @@ public class DicFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dic, container, false);
         findViews(view);
+        setOnClickListeners();
         return view;
     }
 
@@ -60,5 +64,25 @@ public class DicFragment extends Fragment {
         mSpinnerDst= view.findViewById(R.id.spinnerDst);
         mTextViewSrc= view.findViewById(R.id.textViewSrc);
         mTextViewDst= view.findViewById(R.id.textViewDst);
+        mButtonSearch = view.findViewById(R.id.buttonSearch);
+        mButtonAdd = view.findViewById(R.id.buttonSearch);
     }
+
+    private void setOnClickListeners() {
+        mButtonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mButtonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+
 }

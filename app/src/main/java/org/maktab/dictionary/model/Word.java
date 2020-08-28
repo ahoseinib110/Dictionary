@@ -1,12 +1,21 @@
 package org.maktab.dictionary.model;
 
-import java.util.UUID;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import java.util.UUID;
+@Entity(tableName = "wordTable")
 public class Word {
+    @PrimaryKey(autoGenerate = true)
     private int mID;
+    @ColumnInfo(name = "english")
     private String mEnglish;
+    @ColumnInfo(name = "persian")
     private String mPersian;
+    @ColumnInfo(name = "french")
     private String mFrench;
+    @ColumnInfo(name = "arabic")
     private String mArabic;
 
     public static class Builder {
