@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.maktab.dictionary.R;
 
@@ -17,6 +20,11 @@ import org.maktab.dictionary.R;
  */
 public class DicFragment extends Fragment {
 
+    private SearchView mSearchView;
+    private Spinner mSpinnerSrc;
+    private Spinner mSpinnerDst;
+    private TextView mTextViewSrc;
+    private TextView mTextViewDst;
 
     public DicFragment() {
         // Required empty public constructor
@@ -41,6 +49,16 @@ public class DicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dic, container, false);
+        View view = inflater.inflate(R.layout.fragment_dic, container, false);
+        findViews(view);
+        return view;
+    }
+
+    public void findViews(View view){
+        mSearchView = view.findViewById(R.id.searchView);
+        mSpinnerSrc= view.findViewById(R.id.spinnerSrc);
+        mSpinnerDst= view.findViewById(R.id.spinnerDst);
+        mTextViewSrc= view.findViewById(R.id.textViewSrc);
+        mTextViewDst= view.findViewById(R.id.textViewDst);
     }
 }
