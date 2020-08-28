@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.UUID;
 @Entity(tableName = "wordTable")
 public class Word {
     @PrimaryKey(autoGenerate = true)
@@ -17,7 +16,7 @@ public class Word {
     private String mFrench;
     @ColumnInfo(name = "arabic")
     private String mArabic;
-
+/*
     public static class Builder {
         private String english;
         private String persian;
@@ -63,8 +62,8 @@ public class Word {
             return word;
         }
     }
-
-    private Word() {
+*/
+    public Word() {
 
     }
 

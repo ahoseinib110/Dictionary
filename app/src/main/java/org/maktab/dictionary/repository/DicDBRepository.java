@@ -1,20 +1,15 @@
 package org.maktab.dictionary.repository;
 
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.room.Room;
 
-import org.maktab.dictionary.database.DicCursorWrapper;
 import org.maktab.dictionary.database.DicDB;
-import org.maktab.dictionary.database.DicDBHelper;
-import org.maktab.dictionary.database.DicDBSchema;
 import org.maktab.dictionary.model.Word;
 
 public class DicDBRepository {
+    private static final String TAG = "DR_bashir";
     public static DicDBRepository sDicDBRepository;
 
     private DicDB mDicDB;
@@ -27,6 +22,7 @@ public class DicDBRepository {
     }
 
     private DicDBRepository(Context context) {
+        Log.d(TAG,"inside repo");
         mDicDB = Room.databaseBuilder(context,DicDB.class,"DicDB.db")
                 .allowMainThreadQueries()
                 .build();
