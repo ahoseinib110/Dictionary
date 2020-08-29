@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "wordTable")
 public class Word {
+    @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     private int mID;
     @ColumnInfo(name = "english")

@@ -31,6 +31,10 @@ public class DicDBRepository {
         mDicDB.dicDao().insert(word);
     }
 
+    public void update(Word word) {
+        mDicDB.dicDao().update(word);
+    }
+
     public void delete(Word word) {
         mDicDB.dicDao().delete(word);
     }
@@ -50,6 +54,10 @@ public class DicDBRepository {
 
     public Word getFromArabic(String arabicWord) {
         return mDicDB.dicDao().getFromArabic(arabicWord);
+    }
+
+    public Word get(int wordId){
+        return mDicDB.dicDao().get(wordId);
     }
 
 }

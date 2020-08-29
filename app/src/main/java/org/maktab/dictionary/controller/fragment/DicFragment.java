@@ -3,10 +3,12 @@ package org.maktab.dictionary.controller.fragment;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +42,11 @@ public class DicFragment extends Fragment {
     private Button mButtonAdd;
     private Button mButtonSearch;
     private FrameLayout mResultContainer;
-
+    private ConstraintLayout mConsLayoutTranslation;
     private DicDBRepository mDicRepository;
     private Language mSrc;
     private Language mDst;
-
+    Word mWord;
     public DicFragment() {
         // Required empty public constructor
     }
@@ -89,6 +91,7 @@ public class DicFragment extends Fragment {
         mButtonSearch = view.findViewById(R.id.buttonSearch);
         mButtonAdd = view.findViewById(R.id.buttonAdd);
         mResultContainer = view.findViewById(R.id.container_result);
+        mConsLayoutTranslation = view.findViewById(R.id.cons_layout_translation);
     }
 
     private void setOnClickListeners() {
@@ -109,6 +112,16 @@ public class DicFragment extends Fragment {
                 //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
             }
         });
+
+        mConsLayoutTranslation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d(TAG,"hiiiiiiiii");
+                EditDialogFragment editDialogFragment = EditDialogFragment.newInstance(mWord.getID());
+                editDialogFragment.show(getFragmentManager(),"edit_dialog");
+                return false;
+            }
+        });
     }
 
     private void setTextChangedListener() {
@@ -121,7 +134,7 @@ public class DicFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Log.d(TAG, "on " + s);
-                Word word;
+
                 String wordSrc;
                 String wordDst;
                 boolean LTRSrc;
@@ -129,23 +142,23 @@ public class DicFragment extends Fragment {
 
                 switch (mSrc) {
                     case PERSIAN:
-                        word = mDicRepository.getFromPersian(String.valueOf(s));
-                        wordSrc = word == null ? null : word.getPersian();
+                        mWord = mDicRepository.getFromPersian(String.valueOf(s));
+                        wordSrc = mWord == null ? null : mWord.getPersian();
                         LTRSrc = false;
                         break;
                     case ENGLISH:
-                        word = mDicRepository.getFromEnglish(String.valueOf(s));
-                        wordSrc = word == null ? null : word.getEnglish();
+                        mWord = mDicRepository.getFromEnglish(String.valueOf(s));
+                        wordSrc = mWord == null ? null : mWord.getEnglish();
                         LTRSrc = true;
                         break;
                     case FRENCH:
-                        word = mDicRepository.getFromFrench(String.valueOf(s));
-                        wordSrc = word == null ? null : word.getFrench();
+                        mWord = mDicRepository.getFromFrench(String.valueOf(s));
+                        wordSrc = mWord == null ? null : mWord.getFrench();
                         LTRSrc = true;
                         break;
                     case ARABIC:
-                        word = mDicRepository.getFromArabic(String.valueOf(s));
-                        wordSrc = word == null ? null : word.getArabic();
+                        mWord = mDicRepository.getFromArabic(String.valueOf(s));
+                        wordSrc = mWord == null ? null : mWord.getArabic();
                         LTRSrc = false;
                         break;
                     default:
@@ -154,19 +167,19 @@ public class DicFragment extends Fragment {
 
                 switch (mDst) {
                     case PERSIAN:
-                        wordDst = word == null ? null : word.getPersian();
+                        wordDst = mWord == null ? null : mWord.getPersian();
                         LTRDst = false;
                         break;
                     case ENGLISH:
-                        wordDst = word == null ? null : word.getEnglish();
+                        wordDst = mWord == null ? null : mWord.getEnglish();
                         LTRDst = true;
                         break;
                     case FRENCH:
-                        wordDst = word == null ? null : word.getFrench();
+                        wordDst = mWord == null ? null : mWord.getFrench();
                         LTRDst = true;
                         break;
                     case ARABIC:
-                        wordDst = word == null ? null : word.getArabic();
+                        wordDst = mWord == null ? null : mWord.getArabic();
                         LTRDst = false;
                         break;
                     default:
@@ -191,10 +204,9 @@ public class DicFragment extends Fragment {
                 if (wordSrc != null && wordDst != null) {
                     mTextViewSrc.setText(wordSrc);
                     mTextViewDst.setText(wordDst);
-                } else if (wordSrc == null) {
-                    //Toast.makeText(getActivity(), "this word is not exist in database", Toast.LENGTH_SHORT).show();
-                } else if (wordDst == null) {
-                    //Toast.makeText(getActivity(), "translation of this word is not exist in database", Toast.LENGTH_SHORT).show();
+                } else {
+                    mTextViewSrc.setText("");
+                    mTextViewDst.setText("");
                 }
             }
 

@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import org.maktab.dictionary.model.Word;
 
@@ -13,6 +14,9 @@ import org.maktab.dictionary.model.Word;
 public interface DicDBDao {
     @Insert
     public void insert(Word word);
+
+    @Update
+    public void update(Word word);
 
     @Delete
     public void delete(Word word);
@@ -28,5 +32,8 @@ public interface DicDBDao {
 
     @Query("SELECT * From wordTable where arabic=:arabicWord")
     public Word getFromArabic(String arabicWord);
+
+    @Query("Select * From wordTable Where id=:wordId")
+    public Word get(int wordId);
 
 }
