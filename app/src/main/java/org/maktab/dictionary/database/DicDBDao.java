@@ -17,7 +17,6 @@ public interface DicDBDao {
     @Delete
     public void delete(Word word);
 
-
     @Query("SELECT * From wordTable where english=:englishWord")
     public Word getFromEnglish(String englishWord);
 

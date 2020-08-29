@@ -172,11 +172,8 @@ public class DicFragment extends Fragment {
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
-                //Word word = new Word();
-                //word.setEnglish("cat");
-                //word.setPersian("گربه");
-                mDicRepository.insert(word);
+                //Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
+                //mDicRepository.insert(word);
                 AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
                 addDialogFragment.show(getFragmentManager(),"addDialogFragment");
                 //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
