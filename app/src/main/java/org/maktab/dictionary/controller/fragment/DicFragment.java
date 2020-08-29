@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.maktab.dictionary.R;
 import org.maktab.dictionary.model.Language;
@@ -77,7 +75,7 @@ public class DicFragment extends Fragment {
         findViews(view);
         setOnClickListeners();
         configSpinners();
-        setOnChangeListener();
+        setTextChangedListener();
         return view;
     }
 
@@ -97,6 +95,32 @@ public class DicFragment extends Fragment {
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            }
+        });
+
+        mButtonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
+                //mDicRepository.insert(word);
+                AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
+                addDialogFragment.show(getFragmentManager(), "addDialogFragment");
+                //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
+            }
+        });
+    }
+
+    private void setTextChangedListener() {
+        mEditTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Log.d(TAG, "before " + s);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Log.d(TAG, "on " + s);
                 Word word;
                 String wordSrc;
                 String wordDst;
@@ -105,29 +129,29 @@ public class DicFragment extends Fragment {
 
                 switch (mSrc) {
                     case PERSIAN:
-                        word = mDicRepository.getFromPersian(String.valueOf(mEditTextSearch.getText()));
+                        word = mDicRepository.getFromPersian(String.valueOf(s));
                         wordSrc = word == null ? null : word.getPersian();
                         LTRSrc = false;
                         break;
                     case ENGLISH:
-                        word = mDicRepository.getFromEnglish(String.valueOf(mEditTextSearch.getText()));
+                        word = mDicRepository.getFromEnglish(String.valueOf(s));
                         wordSrc = word == null ? null : word.getEnglish();
                         LTRSrc = true;
                         break;
                     case FRENCH:
-                        word = mDicRepository.getFromFrench(String.valueOf(mEditTextSearch.getText()));
+                        word = mDicRepository.getFromFrench(String.valueOf(s));
                         wordSrc = word == null ? null : word.getFrench();
                         LTRSrc = true;
                         break;
                     case ARABIC:
-                        word = mDicRepository.getFromArabic(String.valueOf(mEditTextSearch.getText()));
+                        word = mDicRepository.getFromArabic(String.valueOf(s));
                         wordSrc = word == null ? null : word.getArabic();
                         LTRSrc = false;
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mSrc);
                 }
-                Log.d(TAG, word.toString());
+
                 switch (mDst) {
                     case PERSIAN:
                         wordDst = word == null ? null : word.getPersian();
@@ -168,35 +192,10 @@ public class DicFragment extends Fragment {
                     mTextViewSrc.setText(wordSrc);
                     mTextViewDst.setText(wordDst);
                 } else if (wordSrc == null) {
-                    Toast.makeText(getActivity(), "this word is not exist in database", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "this word is not exist in database", Toast.LENGTH_SHORT).show();
                 } else if (wordDst == null) {
-                    Toast.makeText(getActivity(), "translation of this word is not exist in database", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "translation of this word is not exist in database", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        mButtonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
-                //mDicRepository.insert(word);
-                AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
-                addDialogFragment.show(getFragmentManager(), "addDialogFragment");
-                //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
-            }
-        });
-    }
-
-    private void setOnChangeListener() {
-        mEditTextSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //Log.d(TAG, "before " + s);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Log.d(TAG, "on " + s);
             }
 
             @Override
