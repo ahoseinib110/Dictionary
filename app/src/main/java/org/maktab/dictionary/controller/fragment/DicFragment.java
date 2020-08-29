@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,7 @@ import org.maktab.dictionary.repository.DicDBRepository;
 public class DicFragment extends Fragment {
 
     private static final String TAG = "DF_bashir";
+    private com.google.android.material.textfield.TextInputLayout mTILSearch;
     private EditText mEditTextSearch;
     private Spinner mSpinnerSrc;
     private Spinner mSpinnerDst;
@@ -73,11 +77,13 @@ public class DicFragment extends Fragment {
         findViews(view);
         setOnClickListeners();
         configSpinners();
+        setOnChangeListener();
         return view;
     }
 
     public void findViews(View view) {
-        mEditTextSearch = view.findViewById(R.id.editTextSearch);
+        mTILSearch = view.findViewById(R.id.outlinedTextFieldSearch);
+        mEditTextSearch = mTILSearch.getEditText();
         mSpinnerSrc = view.findViewById(R.id.spinnerFrom);
         mSpinnerDst = view.findViewById(R.id.spinnerTo);
         mTextViewSrc = view.findViewById(R.id.textViewSrc);
@@ -121,7 +127,7 @@ public class DicFragment extends Fragment {
                     default:
                         throw new IllegalStateException("Unexpected value: " + mSrc);
                 }
-
+                Log.d(TAG, word.toString());
                 switch (mDst) {
                     case PERSIAN:
                         wordDst = word == null ? null : word.getPersian();
@@ -161,10 +167,10 @@ public class DicFragment extends Fragment {
                 if (wordSrc != null && wordDst != null) {
                     mTextViewSrc.setText(wordSrc);
                     mTextViewDst.setText(wordDst);
-                }else if(wordSrc == null){
-                    Toast.makeText(getActivity(),"this word is not exist in database",Toast.LENGTH_SHORT).show();
-                }else if(wordDst == null){
-                    Toast.makeText(getActivity(),"translation of this word is not exist in database",Toast.LENGTH_SHORT).show();
+                } else if (wordSrc == null) {
+                    Toast.makeText(getActivity(), "this word is not exist in database", Toast.LENGTH_SHORT).show();
+                } else if (wordDst == null) {
+                    Toast.makeText(getActivity(), "translation of this word is not exist in database", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -175,12 +181,30 @@ public class DicFragment extends Fragment {
                 //Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
                 //mDicRepository.insert(word);
                 AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
-                addDialogFragment.show(getFragmentManager(),"addDialogFragment");
+                addDialogFragment.show(getFragmentManager(), "addDialogFragment");
                 //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
             }
         });
     }
 
+    private void setOnChangeListener() {
+        mEditTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Log.d(TAG, "before " + s);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Log.d(TAG, "on " + s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
 
     public void configSpinners() {
         final String[] language = {"Persian", "English", "French", "Arabic"};

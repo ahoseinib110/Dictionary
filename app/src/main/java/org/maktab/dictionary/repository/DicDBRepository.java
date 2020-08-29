@@ -22,7 +22,6 @@ public class DicDBRepository {
     }
 
     private DicDBRepository(Context context) {
-        Log.d(TAG,"inside repo");
         mDicDB = Room.databaseBuilder(context,DicDB.class,"DicDB.db")
                 .allowMainThreadQueries()
                 .build();

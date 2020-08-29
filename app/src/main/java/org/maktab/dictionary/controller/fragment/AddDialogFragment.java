@@ -125,43 +125,28 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
         EditText editTextWord = mTILWord.getEditText();
         EditText editTextTr = mTILTranslation.getEditText();
         Log.d(TAG, String.valueOf(editTextWord.getText()));
-
         Word word = new Word();
-
-        switch (mFrom) {
-            case PERSIAN:
-                word.setPersian(String.valueOf(editTextWord.getText()));
-                break;
-            case ENGLISH:
-                word.setEnglish(String.valueOf(editTextWord.getText()));
-                break;
-            case FRENCH:
-                word.setFrench(String.valueOf(editTextWord.getText()));
-                break;
-            case ARABIC:
-                word.setArabic(String.valueOf(editTextWord.getText()));
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + mFrom);
-        }
-
-        switch (mTo) {
-            case PERSIAN:
-                word.setPersian(String.valueOf(editTextTr.getText()));
-                break;
-            case ENGLISH:
-                word.setEnglish(String.valueOf(editTextTr.getText()));
-                break;
-            case FRENCH:
-                word.setFrench(String.valueOf(editTextTr.getText()));
-                break;
-            case ARABIC:
-                word.setArabic(String.valueOf(editTextTr.getText()));
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + mTo);
-        }
+        setWord(word,mFrom,editTextWord);
+        setWord(word,mTo,editTextTr);
         mDicRepository.insert(word);
     }
 
+    private void setWord(Word word, Language language, EditText editText) {
+        switch (language) {
+            case PERSIAN:
+                word.setPersian(String.valueOf(editText.getText()));
+                break;
+            case ENGLISH:
+                word.setEnglish(String.valueOf(editText.getText()));
+                break;
+            case FRENCH:
+                word.setFrench(String.valueOf(editText.getText()));
+                break;
+            case ARABIC:
+                word.setArabic(String.valueOf(editText.getText()));
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + language);
+        }
+    }
 }

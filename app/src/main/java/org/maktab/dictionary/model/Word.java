@@ -106,4 +106,15 @@ public class Word {
     public void setID(int ID) {
         mID = ID;
     }
+
+    @Override
+    public String toString() {
+        return "Word{" +
+                "mID=" + mID +
+                ", mEnglish='" + mEnglish + '\'' +
+                ", mPersian='" + mPersian + '\'' +
+                ", mFrench='" + mFrench + '\'' +
+                ", mArabic='" + mArabic + '\'' +
+                '}';
+    }
 }
