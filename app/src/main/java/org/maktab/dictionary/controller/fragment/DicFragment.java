@@ -3,6 +3,7 @@ package org.maktab.dictionary.controller.fragment;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -10,6 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -67,6 +71,26 @@ public class DicFragment extends Fragment {
         mDicRepository = DicDBRepository.newInstance(getActivity().getApplicationContext());
         mSrc = Language.ENGLISH;
         mDst = Language.PERSIAN;
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.dic_fragment_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_add_word:
+                AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
+                addDialogFragment.show(getFragmentManager(), "addDialogFragment");
+                return true;
+            case R.id.menu_item_share:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -105,11 +129,7 @@ public class DicFragment extends Fragment {
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Word word = new Word.Builder().inEnglish("cat").inPersian("گربه").build();
-                //mDicRepository.insert(word);
-                AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
-                addDialogFragment.show(getFragmentManager(), "addDialogFragment");
-                //Log.d("bashir",String.valueOf(mEditTextSearch.getText()));
+
             }
         });
 
