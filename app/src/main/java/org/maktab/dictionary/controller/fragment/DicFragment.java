@@ -87,7 +87,10 @@ public class DicFragment extends Fragment {
                 addDialogFragment.show(getFragmentManager(), "addDialogFragment");
                 return true;
             case R.id.menu_item_share:
-                return true;
+                if(mWord!=null){
+                    //implicit intent for share
+                    return true;
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
