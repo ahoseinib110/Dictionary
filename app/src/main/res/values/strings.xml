@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_view_src">From</string>
     <string name="text_view_dst">To</string>
+
+    <string name="subtitle_format">%1$d words</string>
 </resources>

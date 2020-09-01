@@ -8,6 +8,8 @@ import androidx.room.Room;
 import org.maktab.dictionary.database.DicDB;
 import org.maktab.dictionary.model.Word;
 
+import java.util.List;
+
 public class DicDBRepository {
     private static final String TAG = "DR_bashir";
     public static DicDBRepository sDicDBRepository;
@@ -58,6 +60,10 @@ public class DicDBRepository {
 
     public Word get(int wordId){
         return mDicDB.dicDao().get(wordId);
+    }
+
+    public List<Word> getList(){
+        return mDicDB.dicDao().getList();
     }
 
 }

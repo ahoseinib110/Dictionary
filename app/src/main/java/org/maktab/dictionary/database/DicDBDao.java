@@ -10,6 +10,8 @@ import androidx.room.Update;
 
 import org.maktab.dictionary.model.Word;
 
+import java.util.List;
+
 @Dao
 public interface DicDBDao {
     @Insert
@@ -35,5 +37,8 @@ public interface DicDBDao {
 
     @Query("Select * From wordTable Where id=:wordId")
     public Word get(int wordId);
+
+    @Query("Select * From wordTable")
+    public List<Word> getList();
 
 }

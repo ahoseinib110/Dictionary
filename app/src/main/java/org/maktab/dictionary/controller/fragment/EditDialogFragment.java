@@ -1,8 +1,10 @@
 package org.maktab.dictionary.controller.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,10 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -24,8 +24,10 @@ import org.maktab.dictionary.model.Language;
 import org.maktab.dictionary.model.Word;
 import org.maktab.dictionary.repository.DicDBRepository;
 
+import java.util.Date;
 
-public class EditDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
+
+public class EditDialogFragment extends DialogFragment  {
 
     private static final String ARG_WORD_ID = "wordId";
 
@@ -84,8 +86,9 @@ public class EditDialogFragment extends DialogFragment implements DialogInterfac
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Edit Word")
                 .setView(view)
-                .setPositiveButton("Edit", this)
-                .setNegativeButton("cancel", null)
+                .setPositiveButton("Edit", new ListenerEdit())
+                .setNeutralButton("Delete",new ListenerDC(true))
+                .setNegativeButton("Cancel", new ListenerDC(false))
                 .create();
     }
 
@@ -131,32 +134,56 @@ public class EditDialogFragment extends DialogFragment implements DialogInterfac
         mSpinnerTo.setSelection(0);
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        setWord(mWord, mFrom, mEditTextWord);
-        setWord(mWord, mTo, mEditTextTr);
-        mDicRepository.update(mWord);
-    }
-
-    private void setWord(Word word, Language language, EditText editText) {
-        switch (language) {
-            case PERSIAN:
-                word.setPersian(String.valueOf(editText.getText()));
-                break;
-            case ENGLISH:
-                word.setEnglish(String.valueOf(editText.getText()));
-                break;
-            case FRENCH:
-                word.setFrench(String.valueOf(editText.getText()));
-                break;
-            case ARABIC:
-                word.setArabic(String.valueOf(editText.getText()));
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + language);
+    private class ListenerEdit implements DialogInterface.OnClickListener{
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            setWord(mWord, mFrom, mEditTextWord);
+            setWord(mWord, mTo, mEditTextTr);
+            mDicRepository.update(mWord);
+            setResult();
+        }
+        private void setWord(Word word, Language language, EditText editText) {
+            switch (language) {
+                case PERSIAN:
+                    word.setPersian(String.valueOf(editText.getText()));
+                    break;
+                case ENGLISH:
+                    word.setEnglish(String.valueOf(editText.getText()));
+                    break;
+                case FRENCH:
+                    word.setFrench(String.valueOf(editText.getText()));
+                    break;
+                case ARABIC:
+                    word.setArabic(String.valueOf(editText.getText()));
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + language);
+            }
         }
     }
 
+    private class ListenerDC implements DialogInterface.OnClickListener{
+
+      private  boolean mDelete ;
+
+        public ListenerDC(boolean delete) {
+            mDelete = delete;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(mDelete){
+                mDicRepository.delete(mWord);
+                setResult();
+            }
+            dismiss();
+        }
+    }
+    private void setResult() {
+        Fragment fragment = getTargetFragment();
+        Intent intent = new Intent();
+        fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+    }
     private void setText(Word word, Language language, EditText editText) {
         switch (language) {
             case PERSIAN:

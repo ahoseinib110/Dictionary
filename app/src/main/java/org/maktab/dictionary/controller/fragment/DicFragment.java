@@ -1,9 +1,13 @@
 package org.maktab.dictionary.controller.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -37,6 +41,8 @@ import org.maktab.dictionary.repository.DicDBRepository;
 public class DicFragment extends Fragment {
 
     private static final String TAG = "DF_bashir";
+    public static final int REQUEST_CODE_ADD = 0;
+    private static final int REQUEST_CODE_EDIT = 1;
     private com.google.android.material.textfield.TextInputLayout mTILSearch;
     private EditText mEditTextSearch;
     private Spinner mSpinnerSrc;
@@ -51,6 +57,7 @@ public class DicFragment extends Fragment {
     private Language mSrc;
     private Language mDst;
     Word mWord;
+
     public DicFragment() {
         // Required empty public constructor
     }
@@ -76,7 +83,7 @@ public class DicFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.dic_fragment_menu,menu);
+        inflater.inflate(R.menu.dic_fragment_menu, menu);
     }
 
     @Override
@@ -84,11 +91,17 @@ public class DicFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_add_word:
                 AddDialogFragment addDialogFragment = AddDialogFragment.newInstance();
+                addDialogFragment.setTargetFragment(DicFragment.this, REQUEST_CODE_ADD);
                 addDialogFragment.show(getFragmentManager(), "addDialogFragment");
                 return true;
             case R.id.menu_item_share:
-                if(mWord!=null){
-                    //implicit intent for share
+                if (mWord != null) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, mTextViewSrc.getText() + " = " + mTextViewDst.getText());
+                    sendIntent.setType("text/plain");
+                    Intent shareIntent = Intent.createChooser(sendIntent, null);
+                    startActivity(shareIntent);
                     return true;
                 }
             default:
@@ -105,6 +118,7 @@ public class DicFragment extends Fragment {
         setOnClickListeners();
         configSpinners();
         setTextChangedListener();
+        updateSubtitle();
         return view;
     }
 
@@ -139,9 +153,10 @@ public class DicFragment extends Fragment {
         mConsLayoutTranslation.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d(TAG,"hiiiiiiiii");
+                Log.d(TAG, "hiiiiiiiii");
                 EditDialogFragment editDialogFragment = EditDialogFragment.newInstance(mWord.getID());
-                editDialogFragment.show(getFragmentManager(),"edit_dialog");
+                editDialogFragment.setTargetFragment(DicFragment.this, REQUEST_CODE_EDIT);
+                editDialogFragment.show(getFragmentManager(), "edit_dialog");
                 return false;
             }
         });
@@ -157,80 +172,7 @@ public class DicFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Log.d(TAG, "on " + s);
-
-                String wordSrc;
-                String wordDst;
-                boolean LTRSrc;
-                boolean LTRDst;
-
-                switch (mSrc) {
-                    case PERSIAN:
-                        mWord = mDicRepository.getFromPersian(String.valueOf(s));
-                        wordSrc = mWord == null ? null : mWord.getPersian();
-                        LTRSrc = false;
-                        break;
-                    case ENGLISH:
-                        mWord = mDicRepository.getFromEnglish(String.valueOf(s));
-                        wordSrc = mWord == null ? null : mWord.getEnglish();
-                        LTRSrc = true;
-                        break;
-                    case FRENCH:
-                        mWord = mDicRepository.getFromFrench(String.valueOf(s));
-                        wordSrc = mWord == null ? null : mWord.getFrench();
-                        LTRSrc = true;
-                        break;
-                    case ARABIC:
-                        mWord = mDicRepository.getFromArabic(String.valueOf(s));
-                        wordSrc = mWord == null ? null : mWord.getArabic();
-                        LTRSrc = false;
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + mSrc);
-                }
-
-                switch (mDst) {
-                    case PERSIAN:
-                        wordDst = mWord == null ? null : mWord.getPersian();
-                        LTRDst = false;
-                        break;
-                    case ENGLISH:
-                        wordDst = mWord == null ? null : mWord.getEnglish();
-                        LTRDst = true;
-                        break;
-                    case FRENCH:
-                        wordDst = mWord == null ? null : mWord.getFrench();
-                        LTRDst = true;
-                        break;
-                    case ARABIC:
-                        wordDst = mWord == null ? null : mWord.getArabic();
-                        LTRDst = false;
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + mDst);
-                }
-
-                mResultContainer.setVisibility(View.VISIBLE);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (LTRSrc) {
-                        mTextViewSrc.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    } else {
-                        mTextViewSrc.setTextDirection(View.TEXT_DIRECTION_RTL);
-                    }
-
-                    if (LTRDst) {
-                        mTextViewDst.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    } else {
-                        mTextViewDst.setTextDirection(View.TEXT_DIRECTION_RTL);
-                    }
-                }
-                if (wordSrc != null && wordDst != null) {
-                    mTextViewSrc.setText(wordSrc);
-                    mTextViewDst.setText(wordDst);
-                } else {
-                    mTextViewSrc.setText("");
-                    mTextViewDst.setText("");
-                }
+                updateResults(String.valueOf(s));
             }
 
             @Override
@@ -238,6 +180,84 @@ public class DicFragment extends Fragment {
 
             }
         });
+    }
+
+    private void updateResults(String searchedWord) {
+        String wordSrc;
+        String wordDst;
+        boolean LTRSrc;
+        boolean LTRDst;
+
+        switch (mSrc) {
+            case PERSIAN:
+                mWord = mDicRepository.getFromPersian(String.valueOf(searchedWord));
+                wordSrc = mWord == null ? null : mWord.getPersian();
+                LTRSrc = false;
+                break;
+            case ENGLISH:
+                mWord = mDicRepository.getFromEnglish(String.valueOf(searchedWord));
+                wordSrc = mWord == null ? null : mWord.getEnglish();
+                LTRSrc = true;
+                break;
+            case FRENCH:
+                mWord = mDicRepository.getFromFrench(String.valueOf(searchedWord));
+                wordSrc = mWord == null ? null : mWord.getFrench();
+                LTRSrc = true;
+                break;
+            case ARABIC:
+                mWord = mDicRepository.getFromArabic(String.valueOf(searchedWord));
+                wordSrc = mWord == null ? null : mWord.getArabic();
+                LTRSrc = false;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + mSrc);
+        }
+
+        switch (mDst) {
+            case PERSIAN:
+                wordDst = mWord == null ? null : mWord.getPersian();
+                LTRDst = false;
+                break;
+            case ENGLISH:
+                wordDst = mWord == null ? null : mWord.getEnglish();
+                LTRDst = true;
+                break;
+            case FRENCH:
+                wordDst = mWord == null ? null : mWord.getFrench();
+                LTRDst = true;
+                break;
+            case ARABIC:
+                wordDst = mWord == null ? null : mWord.getArabic();
+                LTRDst = false;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + mDst);
+        }
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (LTRSrc) {
+                mTextViewSrc.setTextDirection(View.TEXT_DIRECTION_LTR);
+            } else {
+                mTextViewSrc.setTextDirection(View.TEXT_DIRECTION_RTL);
+            }
+
+            if (LTRDst) {
+                mTextViewDst.setTextDirection(View.TEXT_DIRECTION_LTR);
+            } else {
+                mTextViewDst.setTextDirection(View.TEXT_DIRECTION_RTL);
+            }
+        }
+        if (wordSrc != null && wordDst != null) {
+            mTextViewSrc.setText(wordSrc);
+            mTextViewDst.setText(wordDst);
+            mResultContainer.setVisibility(View.VISIBLE);
+        } else {
+            mTextViewSrc.setText("");
+            mTextViewDst.setText("");
+            mResultContainer.setVisibility(View.GONE);
+        }
     }
 
     public void configSpinners() {
@@ -274,4 +294,23 @@ public class DicFragment extends Fragment {
         mSpinnerDst.setSelection(0);
     }
 
+
+    private void updateSubtitle() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        int numberOfWords = mDicRepository.getList().size();
+        String crimesString = getString(R.string.subtitle_format, numberOfWords);
+        activity.getSupportActionBar().setSubtitle(crimesString);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_ADD || requestCode==REQUEST_CODE_EDIT) {
+                updateSubtitle();
+                updateResults(String.valueOf(mEditTextSearch.getText()));
+            }
+        }
+    }
 }
