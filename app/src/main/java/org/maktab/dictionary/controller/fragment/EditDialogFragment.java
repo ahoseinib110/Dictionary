@@ -181,8 +181,7 @@ public class EditDialogFragment extends DialogFragment  {
     }
     private void setResult() {
         Fragment fragment = getTargetFragment();
-        Intent intent = new Intent();
-        fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+        fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
     }
     private void setText(Word word, Language language, EditText editText) {
         switch (language) {

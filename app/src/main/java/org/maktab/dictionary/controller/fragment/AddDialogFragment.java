@@ -1,5 +1,6 @@
 package org.maktab.dictionary.controller.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -129,6 +130,7 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
         setWord(word,mFrom,editTextWord);
         setWord(word,mTo,editTextTr);
         mDicRepository.insert(word);
+        getTargetFragment().onActivityResult(DicFragment.REQUEST_CODE_ADD, Activity.RESULT_OK,null);
     }
 
     private void setWord(Word word, Language language, EditText editText) {
